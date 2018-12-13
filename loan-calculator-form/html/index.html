@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Loan calculator - KubeCon+CloudNativeCon 2018</title>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+      body, input, button {
+        font-size: 1.2rem;
+        font-family: sans-serif;
+      }
+
+      .content {
+        width: 60%;
+        margin: 50px auto;
+      }
+
+      td {
+        padding: 8px
+      }
+
+      .buttons {
+          text-align: right;
+      }
+
+      button {
+        margin: 3px;
+        padding: 10px;
+      }
+
+      .result {
+        border: 1px darkgreen dotted;
+        padding: 20px;
+        background-color: beige;
+      }
+    </style>
+</head>
+<body>
+    <div id="app"> </div>
+    <!-- script src="app.js"></script -->
+    <script>
+    const App = {
+        name: 'app',
+        data() {
+          return {
+            amount: null,
+            rate: null,
+            term: null,
+            result: null
+          }
+        },
+        methods: {
+          clear() {
+            this.amount = null;
+            this.rate = null;
+            this.term = null;
+            this.result = null;
+          },
+          setResult(payment) {
+
+          }
+          ,
+          calculate() {
+            console.log("calculate");
+            if (!!this.rate & !!this.rate & !!this.term) {
+              axios.get('/function/loan-calculator', {
+                params: {
+                  amount: this.amount,
+                  rate: this.rate,
+                  term: this.term
+                }
+              })
+              .then(response => {
+                console.log(response);
+                // this.setResult(response.data.payment);
+                this.result = `You will pay back ${this.term} payments of ${response.data.payment} USD.`
+                console.log(this.result);
+
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+              ;
+            } // if ...
+
+          }
+        },
+        template: `
+          <div class="content">
+            <div class="header">
+              <h1>Get your loan</h1>
+            </div>
+            <div class="calculator-form">
+              <table>
+                <tr>
+                  <td>Amount</td><td><input v-model="amount" placeholder="amount" v-on:keyup="calculate"></td>
+                </tr>
+                <tr>
+                  <td>Rate</td><td><input v-model="rate" placeholder="rate in %" v-on:keyup="calculate"></td>
+                </tr>
+                <tr>
+                  <td>Term</td><td><input v-model="term" placeholder="in months" v-on:keyup="calculate"></td>
+                </tr>
+                <!-- tr>
+                  <td colspan=2 class="buttons">
+                    <button v-on:click="clear">Clear</button>
+                    <button v-on:click="calculate">Calculate</button>
+                  </td>
+                </tr -->
+                <tr v-if="!!result">
+                  <td colspan=2>
+                    <div class="result">{{ result }}</div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          `
+    }
+
+    new Vue({
+        el: "#app",
+        components: {
+          App
+      },
+      template: `<app />`
+    })
+    </script>
+</body>
+</html>
