@@ -111,12 +111,13 @@
                     <button v-on:click="calculate">Calculate</button>
                   </td>
                 </tr -->
-                <tr v-if="!!result">
+                <tr >
                   <td colspan=2>
-                    <div class="result">{{ result }}</div>
+
                   </td>
                 </tr>
               </table>
+              <div v-if="!!result" class="result">{{ result }}</div>
             </div>
           </div>
           `
