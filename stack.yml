@@ -1,7 +1,7 @@
 # loan-calculator-form
 provider:
   name: faas
-  gateway: http://127.0.0.1:31112
+  gateway: http://127.0.0.1:8080
 functions:
   loan-calculator-form:
     lang: node

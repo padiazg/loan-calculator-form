@@ -50,7 +50,8 @@
             amount: null,
             rate: null,
             term: null,
-            result: null
+            result: null,
+            calculatorUrl: /.*\.o6s\.io$/.test(window.location.hostname) ? '/loan-calculator' : '/function/loan-calculator'
           }
         },
         methods: {
@@ -60,14 +61,10 @@
             this.term = null;
             this.result = null;
           },
-          setResult(payment) {
-
-          }
-          ,
           calculate() {
             console.log("calculate");
             if (!!this.rate & !!this.rate & !!this.term) {
-              axios.get('/function/loan-calculator', {
+              axios.get(this.calculatorUrl, {
                 params: {
                   amount: this.amount,
                   rate: this.rate,
@@ -76,7 +73,6 @@
               })
               .then(response => {
                 console.log(response);
-                // this.setResult(response.data.payment);
                 this.result = `You will pay back ${this.term} payments of ${response.data.payment} USD.`
                 console.log(this.result);
 
